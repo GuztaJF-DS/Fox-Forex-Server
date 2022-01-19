@@ -36,9 +36,7 @@ export function connect(){
 
       if(data.toString()!=="Connected"){
         let PipData=PipFunction(JSON.parse(data.toString()),false,1)
-        console.log(PipData);
         let SwapTax=SwapFunction(PipData.PipPrice,true,1,0.51,1)
-        console.log(SwapTax);
       }
 
         wss.clients.forEach((client)=>{

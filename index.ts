@@ -1,10 +1,11 @@
 import express from 'express';
 import index from './src/routes/index'
-import {connect} from './src/websocket';
+import {connect} from './src/websocket'
+import db from './src/database/connection'
 import 'dotenv/config';
 
 const app=express()
-
+db()
 connect()
 app.use(index)
 

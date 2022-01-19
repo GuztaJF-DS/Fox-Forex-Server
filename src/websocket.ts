@@ -1,6 +1,7 @@
 import WebSocket,{WebSocketServer} from 'ws'
 import PipFunction from './middleware/PipFunction';
- 
+import SwapFunction from './middleware/SwapFunction'; 
+
 var reconnectInterval  = 1000 * 10
 
 export function connect(){
@@ -34,7 +35,10 @@ export function connect(){
     MarketDataWs.on('message', function incoming(data:any) {
 
       if(data.toString()!=="Connected"){
-        console.log(PipFunction(JSON.parse(data.toString()),false,1))
+        let PipData=PipFunction(JSON.parse(data.toString()),false,1)
+        console.log(PipData);
+        let SwapTax=SwapFunction(PipData.PipPrice,true,1,0.51,1)
+        console.log(SwapTax);
       }
 
         wss.clients.forEach((client)=>{

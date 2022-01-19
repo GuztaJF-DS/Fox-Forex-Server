@@ -1,6 +1,8 @@
 import WebSocket,{WebSocketServer} from 'ws'
-var reconnectInterval  = 1000 * 10
+import PipFunction from './middleware/PipFunction';
  
+var reconnectInterval  = 1000 * 10
+
 export function connect(){
     const MarketDataWs = new WebSocket('wss://marketdata.tradermade.com/feedadv');
 
@@ -30,6 +32,11 @@ export function connect(){
     });
 
     MarketDataWs.on('message', function incoming(data:any) {
+
+      if(data.toString()!=="Connected"){
+        console.log(PipFunction(JSON.parse(data.toString()),false,1))
+      }
+
         wss.clients.forEach((client)=>{
             if(client.readyState===WebSocket.OPEN){
                 client.send(data.toString())

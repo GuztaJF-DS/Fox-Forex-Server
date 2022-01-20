@@ -1,6 +1,4 @@
 import WebSocket,{WebSocketServer} from 'ws'
-import PipFunction from './middleware/PipFunction';
-import SwapFunction from './middleware/SwapFunction'; 
 
 var reconnectInterval  = 1000 * 10
 
@@ -33,12 +31,6 @@ export function connect(){
     });
 
     MarketDataWs.on('message', function incoming(data:any) {
-
-      if(data.toString()!=="Connected"){
-        let PipData=PipFunction(JSON.parse(data.toString()),false,1)
-        let SwapTax=SwapFunction(PipData.PipPrice,true,1,0.51,1)
-      }
-
         wss.clients.forEach((client)=>{
             if(client.readyState===WebSocket.OPEN){
                 client.send(data.toString())

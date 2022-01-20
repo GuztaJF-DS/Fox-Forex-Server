@@ -1,5 +1,5 @@
 import express,{Request,Response} from 'express';
-import {IUser,User} from '../database/userdb'
+import {User} from '../database/userdb'
 
 const router=express();  
 
@@ -12,12 +12,11 @@ router.post('/Update',async(req:Request,res:Response)=>{
     try{
         const body=req.body as requestBodyUser;
         const OldQuery=await User.find({});
-        console.log(OldQuery);
         const query={
             currentProfit: req.body.currentProfit,
             currentLots: req.body.currentLots,
         }
-        User.findOneAndUpdate(OldQuery,query,{upsert:true},function(err,doc){
+        User.findOneAndUpdate(OldQuery,query,{upsert:true},function(err){
             if(err){
                 console.log(err);
                 res.status(400).send({error:"Error on Update Register"});

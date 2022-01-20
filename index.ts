@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import index from './src/routes/index'
+import index from './src/controllers/index'
 import {connect} from './src/websocket'
 import db from './src/database/connection'
 import 'dotenv/config';

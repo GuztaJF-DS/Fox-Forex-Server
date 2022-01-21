@@ -1,15 +1,14 @@
-function PipFunction(DataObject:{bid:number,ask:number,mid:number},IsABuy:Boolean,Lots:number){
+function PipFunction(DataObject:{Opening:number,Closure:number},IsABuy:Boolean,Lots:number){
     
-    let Bid=DataObject.bid;
-    let Ask=DataObject.ask;
-    let Mid=DataObject.mid;
+    let Opening=DataObject.Opening;
+    let Closure=DataObject.Closure;
     let PipQtd=0
 
     if(IsABuy===true){//this mean the user is Buying
-        PipQtd=(Bid-Ask)*10000;
+        PipQtd=(Opening-Closure)*10000;
     }
     else{//and this mean the user is selling
-        PipQtd=(Ask-Bid)*10000;
+        PipQtd=(Closure-Opening)*10000;
     }
 
     let PipPrice=0.0001*(100000*Lots);

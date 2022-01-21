@@ -8,7 +8,7 @@ type requestBodyUser={
     currentLots:number
 }
 
-router.post('/Update',async(req:Request,res:Response)=>{  
+router.post('/update',async(req:Request,res:Response)=>{  
     try{
         const body=req.body as requestBodyUser;
         const OldQuery=await User.find({});
@@ -27,7 +27,7 @@ router.post('/Update',async(req:Request,res:Response)=>{
     }
     catch(err){
         console.log(err);
-        res.status(400).send({error:"Error on Update Register"});
+        res.status(400).send({error:"Error on Update Register (Catch)"});
     }
 });
 

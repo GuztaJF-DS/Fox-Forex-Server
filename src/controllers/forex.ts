@@ -1,29 +1,28 @@
-import express from 'express';
-const PipFunction=require('../middleware/PipFunction');
-const SwapFunction=require('../middleware/SwapFunction');
+import express,{Request,Response} from 'express';
+const PipFunction=require('../middleware/pipFunction');
+const SwapFunction=require('../middleware/swapFunction');
 const router=express();
 
 type requestBodyReturnProfit={
-    bid:number,
-    ask:number,
-    mid:number,
-    IsABuy:boolean,
-    Lots:number,
-    SwapTax:number,
-    TotalNights:number
+    Opening:number,//for the Opening you catch the latest Trade's Mid value and use it 
+    Closure:number,//for the Closure you catch the Actual Mid value and use it
+    IsABuy:boolean,//this says if the user is Buying or selling(True=Buy & False=Sell)
+    Lots:number,//Number of lots Buyed
+    SwapTax:number,//Tax
+    TotalDaysPassed:number//The Amount of nights that a trade Stayed Open 
 }
 
-router.post('/ReturnProfit',async(req,res)=>{
+router.post('/returnprofit',async(req:Request,res:Response)=>{
     try {
         const body=req.body as requestBodyReturnProfit;
-        let PipData=PipFunction({"bid":req.body.bid,"ask":req.body.ask,"mid":req.body.mid},req.body.IsABuy,req.body.Lots)
-        let TotalSwapTax=SwapFunction(PipData.PipPrice,req.body.IsABuy,req.body.Lots,req.body.SwapTax,req.body.TotalNights)    
+        let PipData=PipFunction({"Opening":req.body.Opening,"Closure":req.body.Closure,},req.body.IsABuy,req.body.Lots)
+        let TotalSwapTax=SwapFunction(PipData.PipPrice,req.body.IsABuy,req.body.Lots,req.body.SwapTax,req.body.TotalDaysPassed)    
         let FinalProfitValue = PipData.Profit-TotalSwapTax
         res.status(200).send({FinalProfit:FinalProfitValue,...PipData,SwapTax:TotalSwapTax})
     } 
     catch (err) {
         console.log(err)
-        res.status(400).send({message:'error'})
+        res.status(400).send({error:"Error on Return the Profit"});
     }
 })
 

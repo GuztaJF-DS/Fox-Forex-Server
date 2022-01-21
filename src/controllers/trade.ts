@@ -47,7 +47,7 @@ router.post("/create",async(req:Request,res:Response)=>{
 router.get('/getall',async(req:Request,res:Response)=>{
     try {
         const query=await Trades.find({});
-        res.status(200).send([...query]);
+        res.status(200).send(query);
 
     } catch (err) {
         console.log(err);

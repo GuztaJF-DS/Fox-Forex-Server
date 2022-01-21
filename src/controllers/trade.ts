@@ -12,13 +12,13 @@ type requestBodyTrades={
     PipPrice:number,
     SwapTax:number,
     Finished:boolean,
+    NextOpening:number,
     ID:string
 }
 
 router.post("/create",async(req:Request,res:Response)=>{
     try{
         const body=req.body as requestBodyTrades;
-
         let query={
             Lots:req.body.Lots,
             ExgangeType:req.body.ExgangeType,
@@ -27,7 +27,8 @@ router.post("/create",async(req:Request,res:Response)=>{
             PipQtd:req.body.PipQtd,
             PipPrice:req.body.PipPrice,
             SwapTax:req.body.SwapTax,
-            Finished:req.body.Finished
+            Finished:req.body.Finished,
+            NextOpening:req.body.NextOpening
         }
         await Trades.create(query,function(err){
             if(err){

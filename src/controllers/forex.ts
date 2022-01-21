@@ -17,7 +17,7 @@ type requestBodyReturnProfit={
 router.post('/returnprofit',async(req:Request,res:Response)=>{
     try {
         const body=req.body as requestBodyReturnProfit;
-        let PipData=PipFunction({"Opening":req.body.Opening,"Closure":req.body.Closure,},req.body.IsABuy,req.body.Lots)
+        let PipData=PipFunction(req.body.Opening,req.body.Closure,req.body.IsABuy,req.body.Lots)
         let TotalSwapTax=SwapFunction(PipData.PipPrice,req.body.IsABuy,req.body.Lots,req.body.SwapTax,req.body.TotalDaysPassed)    
         let FinalProfitValue = PipData.Profit-TotalSwapTax
         res.status(200).send({FinalProfit:FinalProfitValue,...PipData,SwapTax:TotalSwapTax})

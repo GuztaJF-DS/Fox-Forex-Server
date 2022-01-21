@@ -8,7 +8,8 @@ export interface ITrades extends Document{
     PipQtd:number,
     PipPrice:number,
     SwapTax:number,
-    Finished:boolean
+    Finished:boolean,
+    NextOpening:number
 }
 
 const TradesSchema: Schema=new Schema({
@@ -20,6 +21,7 @@ const TradesSchema: Schema=new Schema({
     PipPrice:{ type: Number },
     SwapTax:{ type: Number },
     Finished:{ type: Boolean, required: true },
+    NextOpening:{ type: Number, required: true }
 })
 
 export const Trades:Model<ITrades>=model('Trades',TradesSchema)

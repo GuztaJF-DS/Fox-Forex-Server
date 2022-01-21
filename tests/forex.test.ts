@@ -3,14 +3,14 @@ const SwapF=require('../src/middleware/swapFunction');
 
 describe('ForexFunctionsTest',()=>{
     it('Testing PipFunction Buying',async()=>{
-        let Pip=PipF({"Opening":1.36118,"Closure":1.36127},true,1)
+        let Pip=PipF(1.36118,1.36127,true,1)
 
         expect(Pip.PipQtd).toBe(-0.8999999999992347)
         expect(Pip.PipPrice).toBe(10)
         expect(Pip.Profit).toBe(-8.999999999992347)
     })
     it('Testing PipFunction selling',async()=>{
-        let Pip=PipF({"Opening":1.36118,"Closure":1.36127},false,1)
+        let Pip=PipF(1.36118,1.36127,false,1)
 
         expect(Pip.PipQtd).toBe(0.8999999999992347)
         expect(Pip.PipPrice).toBe(10)

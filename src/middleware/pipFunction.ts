@@ -1,7 +1,5 @@
-function PipFunction(DataObject:{Opening:number,Closure:number},IsABuy:Boolean,Lots:number){
+function PipFunction(Opening:number,Closure:number,IsABuy:Boolean,Lots:number){
     
-    let Opening=DataObject.Opening;
-    let Closure=DataObject.Closure;
     let PipQtd=0
 
     if(IsABuy===true){//this mean the user is Buying

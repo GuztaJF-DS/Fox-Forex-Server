@@ -22,7 +22,7 @@ export function connect(){
    
 
     MarketDataWs.on('open', function open() {
-        MarketDataWs.send("{\"userKey\":\""+process.env.API_TOKEN+"\", \"symbol\":\"GBPUSD\"}");
+        MarketDataWs.send("{\"userKey\":\""+process.env.LIVEAPI_TOKEN+"\", \"symbol\":\"GBPUSD\"}");
     });
 
     MarketDataWs.on('close', function() {

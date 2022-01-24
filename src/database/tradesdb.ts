@@ -4,7 +4,8 @@ export interface ITrades extends Document{
     Lots:number,
     ExgangeType:boolean,
     Profit:number,
-    Date:Date,
+    StartDate:Date,
+    FinalDate:Date,
     PipQtd:number,
     PipPrice:number,
     SwapTax:number,
@@ -15,13 +16,14 @@ export interface ITrades extends Document{
 const TradesSchema: Schema=new Schema({
     Lots:{ type: Number, required: true },
     ExgangeType:{ type: Boolean, required: true },
-    Profit:{ type: Number},
-    Date:{ type: Date, required: true },
+    Profit:{ type: Number },
+    StartDate:{ type: Date, },
+    FinalDate:{ type: Date },
     PipQtd:{ type: Number },
     PipPrice:{ type: Number },
     SwapTax:{ type: Number },
     Finished:{ type: Boolean, required: true },
-    NextOpening:{ type: Number, required: true }
+    NextOpening:{ type: Number }
 })
 
 export const Trades:Model<ITrades>=model('Trades',TradesSchema)

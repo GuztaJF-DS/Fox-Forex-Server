@@ -8,7 +8,7 @@ async function getLastOpening(){
   if(trade[trade.length-1].Finished==false){
     return {"LastOpening":trade[trade.length-1].NextOpening,
     "Lots":trade[trade.length-1].Lots,
-    "ExgangeType":trade[trade.length-1].ExgangeType,
+    "ExchangeType":trade[trade.length-1].ExchangeType,
     "SwapTax":trade[trade.length-1].SwapTax,
     "StartDate":trade[trade.length-1].StartDate
   }

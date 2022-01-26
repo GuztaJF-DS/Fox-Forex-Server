@@ -2,7 +2,7 @@ import {Schema,Document,Model,model} from 'mongoose'
 
 export interface ITrades extends Document{
     Lots:number,
-    ExgangeType:boolean,
+    ExchangeType:boolean,
     Profit:number,
     StartDate:Date,
     FinalDate:Date,
@@ -15,7 +15,7 @@ export interface ITrades extends Document{
 
 const TradesSchema: Schema=new Schema({
     Lots:{ type: Number, required: true },
-    ExgangeType:{ type: Boolean, required: true },
+    ExchangeType:{ type: Boolean, required: true },
     Profit:{ type: Number },
     StartDate:{ type: Date, },
     FinalDate:{ type: Date },

@@ -5,7 +5,7 @@ const router=express();
 const axios=require("axios");
 
 type requestBodyReturnProfit={
-    Opening:number,//for the Opening you catch the latest Trade's Mid value and use it 
+    Opening:number,//for the Opening you catch the latest Trade's collection Mid value and use it 
     Closure:number,//for the Closure you catch the Actual Mid value and use it
     IsABuy:boolean,//this says if the user is Buying or selling(True=Buy & False=Sell)
     Lots:number,//Number of lots Buyed
@@ -13,20 +13,6 @@ type requestBodyReturnProfit={
     TotalDaysPassed:number//The Amount of nights that a trade Stayed Open 
 }
 
-
-router.post('/returnprofit',async(req:Request,res:Response)=>{
-    try {
-        const body=req.body as requestBodyReturnProfit;
-        let PipData=PipFunction(req.body.Opening,req.body.Closure,req.body.IsABuy,req.body.Lots)
-        let TotalSwapTax=SwapFunction(PipData.PipPrice,req.body.IsABuy,req.body.Lots,req.body.SwapTax,req.body.TotalDaysPassed)    
-        let FinalProfitValue = PipData.Profit-TotalSwapTax
-        res.status(200).send({FinalProfit:FinalProfitValue,...PipData,SwapTax:TotalSwapTax})
-    } 
-    catch (err) {
-        console.log(err)
-        res.status(400).send({error:"Error on Return the Profit"});
-    }
-})
 
 router.post('/getdailyhistory',async(req:Request,res:Response)=>{
     try{

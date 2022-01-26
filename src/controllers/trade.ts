@@ -5,7 +5,7 @@ const router=express();
 
 type requestBodyTrades={
     Lots:number,
-    ExgangeType:boolean,
+    ExchangeType:boolean,
     Profit:number,
     StartDate:Date,
     FinalDate:Date,
@@ -22,7 +22,7 @@ router.post("/createunfinished",async(req:Request,res:Response)=>{
         const body=req.body as requestBodyTrades;
         let query={
             Lots:req.body.Lots,
-            ExgangeType:req.body.ExgangeType,
+            ExchangeType:req.body.ExchangeType,
             StartDate:req.body.StartDate,
             SwapTax:req.body.SwapTax,
             Finished:false,
@@ -51,7 +51,7 @@ router.post("/updatefinished",async(req:Request,res:Response)=>{
         
         let query={
             Lots:OldQuery.Lots,
-            ExgangeType:OldQuery.ExgangeType,
+            ExchangeType:OldQuery.ExchangeType,
             Profit:req.body.Profit,
             StartDate:req.body.StartDate,
             FinalDate:req.body.FinalDate,            

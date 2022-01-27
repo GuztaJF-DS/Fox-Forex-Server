@@ -53,7 +53,7 @@ router.post("/updatefinished",async(req:Request,res:Response)=>{
             Lots:OldQuery.Lots,
             ExchangeType:OldQuery.ExchangeType,
             Profit:req.body.Profit,
-            StartDate:req.body.StartDate,
+            StartDate:OldQuery.StartDate,
             FinalDate:req.body.FinalDate,            
             PipQtd:req.body.PipQtd,
             PipPrice:req.body.PipPrice,

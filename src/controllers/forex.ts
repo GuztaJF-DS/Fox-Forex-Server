@@ -1,6 +1,4 @@
 import express,{Request,Response} from 'express';
-const PipFunction=require('../middleware/pipFunction');
-const SwapFunction=require('../middleware/swapFunction');
 const router=express();
 const axios=require("axios");
 

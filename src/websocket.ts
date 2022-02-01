@@ -16,13 +16,10 @@ export function connect(io:any){
       setTimeout(connect, reconnectInterval)
     });
 
-    
-
     io.on("connection", (socket: any)=> {
       
       console.log('connected '+socket.id)
       MarketDataWs.on('message', function incoming(data:any) {
-        console.log(data.toString())
         socket.timeout(5000).emit("sendData",data.toString())
       });
     });

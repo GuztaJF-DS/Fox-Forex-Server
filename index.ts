@@ -16,13 +16,14 @@ let io = require("socket.io")(http, {
         credentials: true, origin: '*'
     }
   });
-
 connect(io);
 app.use(bodyParser.json())
 app.use(index)
 
+console.log(process.env.LIVEAPI_TOKEN)
+
 app.listen(process.env.PORT||3000,()=>{
-    console.log(`server listening on port ${(process.env.PORT!='')?process.env.PORT:'3000'}`)
+    console.log(`server listening on ${(process.env.PORT!='')?process.env.PORT:'3000'}`)
 })
 
 const server = http.listen(8080, function() {

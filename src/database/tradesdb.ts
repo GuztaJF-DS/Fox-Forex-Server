@@ -1,6 +1,9 @@
-import {Schema,Document,Model,model} from 'mongoose'
+import {DataTypes,INTEGER,Model} from 'sequelize';
+import {NewSequelize} from './connection';
+import User from './userdb'
 
-export interface ITrades extends Document{
+interface TradesInstance extends Model{
+    id:number,
     Lots:number,
     ExchangeType:boolean,
     Profit:number,
@@ -13,17 +16,59 @@ export interface ITrades extends Document{
     NextOpening:number
 }
 
-const TradesSchema: Schema=new Schema({
-    Lots:{ type: Number, required: true },
-    ExchangeType:{ type: Boolean, required: true },
-    Profit:{ type: Number },
-    StartDate:{ type: Date, },
-    FinalDate:{ type: Date },
-    PipQtd:{ type: Number },
-    PipPrice:{ type: Number },
-    SwapTax:{ type: Number },
-    Finished:{ type: Boolean, required: true },
-    NextOpening:{ type: Number }
-})
+const Trade=NewSequelize.define<TradesInstance>('trade',{
+    id:{
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    Lots:{
+        type:DataTypes.FLOAT,
+        allowNull:false
+    },
+    ExchangeType:{
+        type:DataTypes.BOOLEAN,
+        allowNull:false
+    },
+    Profit:{
+        type:DataTypes.FLOAT,
+        allowNull:true
+    },
+    StartDate:{
+        type:DataTypes.DATE,
+        allowNull:false
+    },
+    FinalDate:{
+        type:DataTypes.DATE,
+        allowNull:true
+    },
+    PipQtd:{
+        type:DataTypes.FLOAT,
+        allowNull:true
+    },
+    PipPrice:{
+        type:DataTypes.FLOAT,
+        allowNull:true
+    },
 
-export const Trades:Model<ITrades>=model('Trades',TradesSchema)
+    Finished:{
+        type:DataTypes.BOOLEAN,
+        allowNull:false
+    },
+
+    NextOpening:{
+        type:DataTypes.FLOAT,
+        allowNull:false
+    },
+    userId:{
+        type:DataTypes.INTEGER,
+        allowNull:false,
+        onDelete:'cascade',
+        references:{
+            model:User,
+            key:'id'
+        }
+    }
+});
+
+export default Trade;

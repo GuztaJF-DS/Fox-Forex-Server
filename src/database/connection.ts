@@ -1,8 +1,19 @@
-import mongoose from "mongoose";
+import {Sequelize} from 'sequelize'
+import 'dotenv/config';
+const DBNameEnv: string = (process.env.DBNAME as string);
+const DBUserNameEnv: string = (process.env.DB_USERNAME as string);
+const DBPasswordEnv: string = (process.env.DB_PASSWORD as string);
 
-main().catch((err:string)=>console.log(err));
+export const NewSequelize=new Sequelize(DBNameEnv,DBUserNameEnv,DBPasswordEnv,{
+    host:'localhost',
+    dialect:'postgres'
+});
 
-export default async function main() {
-    await mongoose.connect('mongodb://localhost:27017/test')
-    var db=mongoose.connection;
+export async function db(){
+    try {
+        const result=await NewSequelize.sync();
+        console.log('Connection has been established successfully.');
+      } catch (error) {
+        console.error('Unable to connect to the database:', error);
+      }
 }

@@ -1,5 +1,5 @@
-import {User} from '../src/database/userdb';
-import db from '../src/database/connectionForTest'
+/*import {User} from '../src/database/userdb';
+import db from '../src/database/connection'
 
 beforeAll (()=>db())
 
@@ -34,4 +34,4 @@ describe("UserTests",()=>{
         }
         expect(Result).toBe("All Right")
     })
-})
+})*/

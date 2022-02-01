@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import index from './src/controllers/index'
 import {connect} from './src/websocket'
-import db from './src/database/connection'
+import {db} from './src/database/connection'
 import 'dotenv/config';
 
 const cors = require('cors');
@@ -26,6 +26,6 @@ app.listen(process.env.PORT||3000,()=>{
 })
 
 const server = http.listen(8080, function() {
-    console.log("listening on *:8080");
-  });
+  console.log("listening on *:8080");
+});
   

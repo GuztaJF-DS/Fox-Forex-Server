@@ -1,13 +1,39 @@
-import {Schema,Document,model,Model} from 'mongoose';
+import {DataTypes,Model} from 'sequelize';
+import {NewSequelize} from './connection'
 
-export interface IUser extends Document {
-    currentProfit: number;
-    currentLots: number;
-  }
-  
-const UserSchema: Schema = new Schema({
-    currentProfit: { type: Number, required: true },
-    currentLots: { type: Number, required: true },
-  });
+interface UserInstance extends Model{
+    currentProfit:number;
+    currentLots:number;
+    userName:string;
+    password:string;
+}
 
-export const User: Model<IUser> = model('User', UserSchema);
+const User=NewSequelize.define<UserInstance>('user',{
+    id:{
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    currentProfit:{
+        type:DataTypes.FLOAT,
+        allowNull:false
+    },
+    currentLots:{
+        type:DataTypes.FLOAT,
+        allowNull:false
+    },
+    userName:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+    password:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+});
+
+User.addScope("excludePassword",{
+    attributes: { exclude: ['password'] }
+})
+
+export default User;

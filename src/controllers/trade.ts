@@ -1,5 +1,5 @@
 import express,{Request,Response} from 'express';
-import { Trades } from '../database/tradesdb';
+import Trades from '../database/tradesdb';
 
 const router=express();
 
@@ -14,7 +14,8 @@ type requestBodyTrades={
     SwapTax:number,
     Finished:boolean,
     NextOpening:number,
-    ID:string
+    ID:number,
+    userId:number
 }
 
 router.post("/createunfinished",async(req:Request,res:Response)=>{
@@ -26,17 +27,13 @@ router.post("/createunfinished",async(req:Request,res:Response)=>{
             StartDate:req.body.StartDate,
             SwapTax:req.body.SwapTax,
             Finished:false,
-            NextOpening:req.body.NextOpening
+            NextOpening:req.body.NextOpening,
+            userId:req.body.userId
         }
-        await Trades.create(query,function(err){
-            if(err){
-                console.log(err);
-                res.status(400).send({error:"Error on Create Register"})
-            }
-            else{
-                res.status(200).send({message:"Register Sucessfully created"})
-            }
-        })
+        const result =await Trades.create(query)
+        if(result){
+            res.status(200).send({message:"Sucessfully Created"});
+        }
     }catch(err){
         console.log(err);
         res.status(400).send({error:"Error on Create Register (Catch)"})
@@ -46,7 +43,7 @@ router.post("/createunfinished",async(req:Request,res:Response)=>{
 router.post("/updatefinished",async(req:Request,res:Response)=>{
     try{
         const body=req.body as requestBodyTrades;
-        let tradeInfo=await Trades.find({});
+        let tradeInfo=await Trades.findAll({where:{userId:req.body.userId}});
         let OldQuery=tradeInfo[tradeInfo.length-1];
         
         let query={
@@ -59,42 +56,29 @@ router.post("/updatefinished",async(req:Request,res:Response)=>{
             PipPrice:req.body.PipPrice,
             SwapTax:OldQuery.SwapTax,
             Finished:true,
-            NextOpening:0
+            NextOpening:0,
+            userId:req.body.userId
         }
-
-        Trades.updateOne({_id:OldQuery._id},query,{upsert:false},function(err){
-            if(err){
-                console.log(err);
-                res.status(400).send({error:"Error on Create Register"})
-            }
-            else{
+        
+        if(OldQuery.Finished===false){
+            const result=await Trades.update(query,{where:{id:OldQuery.id,userId:query.userId}})
+            if(result){
                 res.status(200).send({message:"Register Sucessfully created"})
             }
-        })
+        }
+        else{
+            res.status(200).send({message:"The Trade was already finished!"})
+        }
     }catch(err){
         console.log(err);
         res.status(400).send({error:"Error on Create Register (Catch)"})
     }
 })
 
-router.get('/getall',async(req:Request,res:Response)=>{
+router.post('/getall',async(req:Request,res:Response)=>{
     try {
-        const query=await Trades.find({});
+        const query=await Trades.findAll({where:{userId:req.body.userId}});
         res.status(200).send(query);
-
-    } catch (err) {
-        console.log(err);
-        res.status(400).send({error:"Error on Get all Registers"})
-    }
-})
-
-router.post('/getone',async(req:Request,res:Response)=>{
-    try {
-        const body=req.body as requestBodyTrades;
-
-        const query=await Trades.findById(req.body.ID);
-        res.status(200).send(query);
-
     } catch (err) {
         console.log(err);
         res.status(400).send({error:"Error on Get all Registers"})

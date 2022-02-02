@@ -63,7 +63,6 @@ const Trade=NewSequelize.define<TradesInstance>('trade',{
     userId:{
         type:DataTypes.INTEGER,
         allowNull:false,
-        onDelete:'cascade',
         references:{
             model:User,
             key:'id'

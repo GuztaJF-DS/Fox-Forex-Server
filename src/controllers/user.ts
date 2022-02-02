@@ -34,7 +34,7 @@ router.post('/new',async(req:Request,res:Response)=>{
     }
     catch(err){
         console.log(err);
-        res.status(400).send({error:err});
+        res.status(400).send({error:"Error on creating a new Account"});
     }
 });
 
@@ -52,20 +52,48 @@ router.post('/login',async(req:Request,res:Response)=>{
     }
     catch(err){
         console.log(err);
-        res.status(400).send({error:err});
+        res.status(400).send({error:"Error on Login"});
     }
 });
+
+router.post("/update",async(req:Request,res:Response)=>{
+    try{
+        const body=req.body as requestBodyUser;
+        const query={
+            currentProfit: req.body.currentProfit,
+            currentLots: req.body.currentLots,
+        }
+
+        const UserToUpdateData=await User.findByPk(req.body.id);
+        if(UserToUpdateData===null){
+            res.status(200).send({message:"User Not Found"});
+        }
+        else{
+            await UserToUpdateData?.update(query)
+            const result = await UserToUpdateData?.save()
+
+            if(result){
+                res.status(200).send({message:"Updated Sucessfully"});
+            }
+        }
+        
+    }
+    catch(err){
+        console.log(err);
+        res.status(400).send({error:"Error on update user data"});
+    }
+})
 
 router.get("/get",async(req:Request,res:Response)=>{
     try {
         const result=await User.scope('excludePassword').findAll({});
         if(result){
-            res.status(200).send(result[0]);
+            res.status(200).send(result);
         }
     } 
     catch(err) {
         console.log(err);
-        res.status(400).send({error:"Error on get the Register"});
+        res.status(400).send({error:"Error on get user data"});
     }
 })
 

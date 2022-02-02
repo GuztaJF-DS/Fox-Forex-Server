@@ -36,7 +36,7 @@ router.post("/createunfinished",async(req:Request,res:Response)=>{
         }
     }catch(err){
         console.log(err);
-        res.status(400).send({error:"Error on Create Register (Catch)"})
+        res.status(400).send({error:"Error on Create Register"})
     }
 })
 
@@ -71,7 +71,7 @@ router.post("/updatefinished",async(req:Request,res:Response)=>{
         }
     }catch(err){
         console.log(err);
-        res.status(400).send({error:"Error on Create Register (Catch)"})
+        res.status(400).send({error:"Error on Create Register"})
     }
 })
 

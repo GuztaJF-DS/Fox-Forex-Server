@@ -1,9 +1,11 @@
-const fetch=require('node-fetch');
-const {db}=require('../src/database/connection');
-const express=require('express')
-const bodyParser=require('body-parser')
-const index=require('../src/controllers/index')
+const fetch=require('node-fetch');  
 import 'dotenv/config';
+
+//------------------------------------------
+//------------------------------------------
+//Open the server Before executing the tests
+//------------------------------------------
+//------------------------------------------
 
 const UserQuery={
     currentProfit:5,
@@ -44,11 +46,6 @@ async function getUserId(){
     return(data.id)
 }
 
-db();
-const app=express()
-app.use(bodyParser.json())
-app.use(index)
-const server=app.listen(process.env.PORT||3000)
     
 afterAll(async()=>{
     const userId=await getUserId();
@@ -64,8 +61,6 @@ afterAll(async()=>{
         body:JSON.stringify(UserQuery),
         headers: {'Content-Type': 'application/json'}
     })
-
-    await server.close();
 })
 
 describe("User_Tests",()=>{
@@ -161,7 +156,6 @@ describe("Forex_Tests",()=>{
         StartDate:Yesterday.toISOString(),
         EndDate:Today.toISOString()
     }
-    console.log(query)
 
     it("getsDataPerDay",async()=>{
         const response=await fetch('http://localhost:3030/forex/getdailyhistory',{

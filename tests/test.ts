@@ -153,3 +153,45 @@ describe("Trade_Tests",()=>{
         expect(response.status).toBe(200)
     })
 })
+
+describe("Forex_Tests",()=>{
+    const Today=new Date();
+    const Yesterday=new Date(Today.setDate(Today.getDate()-1));
+    const query={
+        StartDate:Yesterday.toISOString(),
+        EndDate:Today.toISOString()
+    }
+    console.log(query)
+
+    it("getsDataPerDay",async()=>{
+        const response=await fetch('http://localhost:3030/forex/getdailyhistory',{
+            method:'post',
+            body:JSON.stringify(query),
+            headers: {'Content-Type': 'application/json'}
+        })
+        const data = await response.json();
+        expect(response.status).toBe(200)
+        expect(data.error).toBe(undefined)
+    })
+    it("getsDataPerHour",async()=>{
+        const response=await fetch('http://localhost:3030/forex/gethourhistory',{
+            method:'post',
+            body:JSON.stringify(query),
+            headers: {'Content-Type': 'application/json'}
+        })
+        const data = await response.json();
+        expect(response.status).toBe(200)
+        expect(data.error).toBe(undefined)
+    })
+    it("getsDataPerMinute",async()=>{
+        const response=await fetch('http://localhost:3030/forex/getminutehistory',{
+            method:'post',
+            body:JSON.stringify(query),
+            headers: {'Content-Type': 'application/json'}
+        })
+        const data = await response.json();
+        expect(response.status).toBe(200)
+        expect(data.error).toBe(undefined)
+    })
+    
+})

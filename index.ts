@@ -1,11 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import index from './src/controllers/index'
 import {connect} from './src/websocket'
 import {db} from './src/database/connection'
 import 'dotenv/config';
-
-const cors = require('cors');
+const index=require('./src/controllers/index')
 
 const app=express()
 
@@ -20,7 +18,7 @@ connect(io);
 app.use(bodyParser.json())
 app.use(index)
 
-app.listen(process.env.PORT||3000,()=>{
+const server2=app.listen(process.env.PORT||3000,()=>{
     console.log(`server listening on ${(process.env.PORT!='')?process.env.PORT:'3000'}`)
 })
 

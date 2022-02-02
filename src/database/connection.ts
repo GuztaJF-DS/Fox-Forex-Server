@@ -9,7 +9,8 @@ const DBHostEnv: string = (process.env.DB_HOST as string);
 export const NewSequelize=new Sequelize(DBNameEnv,DBUserNameEnv,DBPasswordEnv,{
     host:DBHostEnv,
     dialect:'postgres',
-    port: 5432
+    port: 5432,
+    logging: false
 });
 
 export async function db(){

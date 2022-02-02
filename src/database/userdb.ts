@@ -11,7 +11,7 @@ interface UserInstance extends Model{
 
 const User=NewSequelize.define<UserInstance>('user',{
     id:{
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },

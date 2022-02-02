@@ -22,13 +22,13 @@ router.post("/createunfinished",async(req:Request,res:Response)=>{
     try{
         const body=req.body as requestBodyTrades;
         let query={
-            Lots:req.body.Lots,
-            ExchangeType:req.body.ExchangeType,
-            StartDate:req.body.StartDate,
-            SwapTax:req.body.SwapTax,
+            Lots:body.Lots,
+            ExchangeType:body.ExchangeType,
+            StartDate:body.StartDate,
+            SwapTax:body.SwapTax,
             Finished:false,
-            NextOpening:req.body.NextOpening,
-            userId:req.body.userId
+            NextOpening:body.NextOpening,
+            userId:body.userId
         }
         const result =await Trades.create(query)
         if(result){
@@ -43,21 +43,21 @@ router.post("/createunfinished",async(req:Request,res:Response)=>{
 router.post("/updatefinished",async(req:Request,res:Response)=>{
     try{
         const body=req.body as requestBodyTrades;
-        let tradeInfo=await Trades.findAll({where:{userId:req.body.userId}});
+        let tradeInfo=await Trades.findAll({where:{userId:body.userId}});
         let OldQuery=tradeInfo[tradeInfo.length-1];
         
         let query={
             Lots:OldQuery.Lots,
             ExchangeType:OldQuery.ExchangeType,
-            Profit:req.body.Profit,
+            Profit:body.Profit,
             StartDate:OldQuery.StartDate,
-            FinalDate:req.body.FinalDate,            
-            PipQtd:req.body.PipQtd,
-            PipPrice:req.body.PipPrice,
+            FinalDate:body.FinalDate,            
+            PipQtd:body.PipQtd,
+            PipPrice:body.PipPrice,
             SwapTax:OldQuery.SwapTax,
             Finished:true,
             NextOpening:0,
-            userId:req.body.userId
+            userId:body.userId
         }
         
         if(OldQuery.Finished===false){

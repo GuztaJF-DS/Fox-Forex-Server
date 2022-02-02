@@ -19,62 +19,94 @@ const UserUpdatedQuery={
     password:"TestPassword" 
 }
 
+const TradeQuery={
+    Lots:1,
+    ExchangeType:true,
+    StartDate:"01-01-2022-07:10",
+    SwapTax:0.5,
+	NextOpening:1.36127
+}
+
+const UpdatedTradeQuery={
+    Profit: 6.03999,
+    FinalDate: "2022-01-27T10:30:10.307Z",
+    PipQtd: 0.1509999999993461,
+    PipPrice: 40
+}
+
+async function getUserId(){
+    const response=await fetch('http://localhost:3030/user/login',{
+        method:'post',
+        body:JSON.stringify(UserQuery),
+        headers: {'Content-Type': 'application/json'}
+    })
+    const data = await response.json();
+    return(data.id)
+}
+
 db();
 const app=express()
 app.use(bodyParser.json())
 app.use(index)
-const server=app.listen(process.env.PORT||3000,()=>{
-    console.log(`server listening on ${(process.env.PORT!='')?process.env.PORT:'3000'}`)
-})
+const server=app.listen(process.env.PORT||3000)
     
 afterAll(async()=>{
+    const userId=await getUserId();
+
+    await fetch('http://localhost:3030/trade/deleteTables',{
+        method:'post',
+        body:JSON.stringify({userId}),
+        headers: {'Content-Type': 'application/json'}
+    })
+
     await fetch('http://localhost:3030/user/delete',{
         method:'post',
         body:JSON.stringify(UserQuery),
         headers: {'Content-Type': 'application/json'}
     })
+
     await server.close();
 })
 
 describe("User_Tests",()=>{
-    it("CreateUser",async()=>{
+    it("Create_User",async()=>{
         const response=await fetch('http://localhost:3030/user/new',{
             method:'post',
             body:JSON.stringify(UserQuery),
             headers: {'Content-Type': 'application/json'}
         })
         const data = await response.json();
-        expect(data.message).toBe("Sucessfully Created")
+        expect(data.message).toBe("Successfully Created")
     })
 
-    it("LoginUser",async()=>{
+    it("Login_User",async()=>{
         const response=await fetch('http://localhost:3030/user/login',{
             method:'post',
             body:JSON.stringify(UserQuery),
             headers: {'Content-Type': 'application/json'}
         })
         const data = await response.json();
-        expect(data.message).toBe('Login Sucessfully')
+        expect(data.message).toBe('Login Successfully')
     })
     
-    it("GetUser",async () => {
+    it("Get_User",async () => {
         const response=await fetch('http://localhost:3030/user/get',{
             method:'get'
         })
         expect(response.status).toBe(200)
     })
     
-    it("UpdateUser",async () => {
+    it("Update_User",async () => {
         const response=await fetch('http://localhost:3030/user/update',{
             method:'post',
             body:JSON.stringify(UserUpdatedQuery),
             headers: {'Content-Type': 'application/json'}
         })
         const data = await response.json();
-        expect(data.message).toBe('Updated Sucessfully')
+        expect(data.message).toBe('Updated Successfully')
     })
 
-    it("GetUpdatedUser",async()=>{
+    it("Get_Updated_User",async()=>{
         const response=await fetch('http://localhost:3030/user/login',{
             method:'post',
             body:JSON.stringify(UserUpdatedQuery),
@@ -82,5 +114,42 @@ describe("User_Tests",()=>{
         })
         const data = await response.json();
         expect(data.currentProfit).toBe(50)
+    })
+})
+
+describe("Trade_Tests",()=>{
+
+    it("Create_Unfinished",async()=>{
+        const userId=await getUserId();
+        let NewTradeQuery={...TradeQuery,userId}
+        const response=await fetch('http://localhost:3030/trade/createunfinished',{
+            method:'post',
+            body:JSON.stringify(NewTradeQuery),
+            headers: {'Content-Type': 'application/json'}
+        })
+        const data = await response.json();
+        expect(data.message).toBe("Trade Successfully Started")
+    })
+
+    it("Update_Finished",async()=>{
+        const userId=await getUserId();
+        let NewUpdatedTradeQuery={...UserUpdatedQuery,userId}
+        const response=await fetch('http://localhost:3030/trade/updatefinished',{
+            method:'post',
+            body:JSON.stringify(NewUpdatedTradeQuery),
+            headers: {'Content-Type': 'application/json'}
+        })
+        const data = await response.json();
+        expect(data.message).toBe("Trade Sucessfully Finished")
+    })
+
+    it("Get_Trades", async()=>{
+        const userId=await getUserId();
+        const response=await fetch('http://localhost:3030/trade/getall',{
+            method:'post',
+            body:JSON.stringify({userId}),
+            headers: {'Content-Type': 'application/json'}
+        })
+        expect(response.status).toBe(200)
     })
 })

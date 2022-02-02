@@ -1,4 +1,4 @@
-import {DataTypes,INTEGER,Model} from 'sequelize';
+import {DataTypes,Model} from 'sequelize';
 import {NewSequelize} from './connection';
 import User from './userdb'
 

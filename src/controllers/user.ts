@@ -26,7 +26,7 @@ router.post('/new',async(req:Request,res:Response)=>{
             if(Object.values(checking).length==0){
                 const result =await User.create(query)
                 if(result){
-                    res.status(200).send({message:"Sucessfully Created"});
+                    res.status(200).send({message:"Successfully Created"});
                 }
             }
             else{
@@ -48,7 +48,7 @@ router.post('/login',async(req:Request,res:Response)=>{
             bcrypt.compare(body.password,FindUser.password,async function(err,result){
                 if(result===true){
                     const query={
-                        message:"Login Sucessfully",
+                        message:"Login Successfully",
                         id:FindUser.id,
                         currentProfit:FindUser.currentProfit,
                         currentLots:FindUser.currentLots,
@@ -91,7 +91,7 @@ router.post("/update",async(req:Request,res:Response)=>{
                     const result = await UserToUpdateData?.save()
 
                     if(result){
-                        res.status(200).send({message:"Updated Sucessfully"});
+                        res.status(200).send({message:"Updated Successfully"});
                     }
                 }
                 else{
@@ -134,8 +134,8 @@ router.post("/delete",async(req:Request,res:Response)=>{
         if(UserToUpdateData!==null){
             bcrypt.compare(body.password,UserToUpdateData.password,async function(err,result){
                 if(result===true){
-                    await UserToUpdateData?.destroy()
-                    res.status(200).send({message:"Deleted Sucessfully"});
+                    await UserToUpdateData.destroy()
+                    res.status(200).send({message:"Deleted Successfully"});
                 }
                 else{
                     res.status(200).send({error:"Wrong Password"})

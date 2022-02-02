@@ -2,6 +2,7 @@ import {DataTypes,Model} from 'sequelize';
 import {NewSequelize} from './connection'
 
 interface UserInstance extends Model{
+    id: number;
     currentProfit:number;
     currentLots:number;
     userName:string;
@@ -31,9 +32,5 @@ const User=NewSequelize.define<UserInstance>('user',{
         allowNull:false
     },
 });
-
-User.addScope("excludePassword",{
-    attributes: { exclude: ['password'] }
-})
 
 export default User;

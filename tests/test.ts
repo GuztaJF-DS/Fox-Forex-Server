@@ -1,4 +1,5 @@
 const fetch=require('node-fetch');  
+const io = require("socket.io-client");
 import 'dotenv/config';
 
 //------------------------------------------
@@ -46,6 +47,7 @@ async function getUserId(){
     return(data.id)
 }
 
+const socket=io('http://localhost:8080')
     
 afterAll(async()=>{
     const userId=await getUserId();
@@ -61,6 +63,10 @@ afterAll(async()=>{
         body:JSON.stringify(UserQuery),
         headers: {'Content-Type': 'application/json'}
     })
+    if (socket.connected) {
+        socket.disconnect();
+      }
+    
 })
 
 describe("User_Tests",()=>{
@@ -187,5 +193,16 @@ describe("Forex_Tests",()=>{
         expect(response.status).toBe(200)
         expect(data.error).toBe(undefined)
     })
-    
+})
+
+describe("Websocket_Tests",()=>{
+    it("Connect_Websocket",()=>{
+        expect(socket.connected).toBe(true)
+    })
+
+    it("Recives_Socket_Data",async()=>{
+        socket.on("sendData",function(data:any){
+            expect(JSON.stringify(data.symbol)).toBe("GBPUSD")
+        })
+    })
 })

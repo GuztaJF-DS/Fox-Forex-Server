@@ -60,6 +60,10 @@ const Trade=NewSequelize.define<TradesInstance>('trade',{
         type:DataTypes.FLOAT,
         allowNull:false
     },
+    SwapTax:{
+        type:DataTypes.FLOAT,
+        allowNull:false
+    },
     userId:{
         type:DataTypes.INTEGER,
         allowNull:false,

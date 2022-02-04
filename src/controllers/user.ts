@@ -83,29 +83,17 @@ router.post("/update",async(req:Request,res:Response)=>{
             currentLots: body.currentLots,
         }
 
-        const UserToUpdateData=await User.findOne({where: {userName:body.userName}});
+        const UserToUpdateData=await User.findOne({where: {id:body.id}});
         if(UserToUpdateData!==null){
-            bcrypt.compare(req.body.password,UserToUpdateData.password,async function(err,result){
-                if(result===true){
-                    await UserToUpdateData?.update(query)
-                    const result = await UserToUpdateData?.save()
-
-                    if(result){
-                        res.status(200).send({message:"Updated Successfully"});
-                    }
-                }
-                else{
-                    res.status(200).send({error:"Wrong Password"})
-                }
-                if(err){
-                    console.log(err)
-                    res.status(400).send({error:"Error on bcrypt"});
-                }
-            })
-        }else{
+            await UserToUpdateData?.update(query)
+            const result = await UserToUpdateData?.save()
+            if(result){
+                res.status(200).send({message:"Updated Successfully"});
+            }  
+        }
+        else{
             res.status(200).send({error:"User Not Found"})
         }
-        
     }
     catch(err){
         console.log(err);

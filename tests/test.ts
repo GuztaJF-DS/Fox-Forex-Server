@@ -200,9 +200,11 @@ describe("Websocket_Tests",()=>{
         expect(socket.connected).toBe(true)
     })
 
-    it("Recives_Socket_Data",async()=>{
+    it("Recives_Socket_Data",(done)=>{
         socket.on("sendData",function(data:any){
-            expect(JSON.stringify(data.symbol)).toBe("GBPUSD")
+            let parsedData=(JSON.parse(data))
+            expect(parsedData.symbol).toBe("GBPUSD")
+            done()
         })
     })
 })

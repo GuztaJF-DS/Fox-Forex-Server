@@ -41,7 +41,7 @@ router.post('/gethourhistory',async(req:Request,res:Response)=>{
 router.post('/getminutehistory',async(req:Request,res:Response)=>{
     try{
         let AxiosRes=await axios({
-            url:`https://marketdata.tradermade.com/api/v1/timeseries?currency=GBPUSD&api_key=${process.env.API_TOKEN}&start_date=${req.body.StartDate}&end_date=${req.body.EndDate}&format=records&interval=minute&period=15`,
+            url:`https://marketdata.tradermade.com/api/v1/timeseries?currency=GBPUSD&api_key=${process.env.API_TOKEN}&start_date=${req.body.StartDate}&end_date=${req.body.EndDate}&format=records&interval=minute&period=1`,
             method:'get',
             timeout:10000,
             headers: {

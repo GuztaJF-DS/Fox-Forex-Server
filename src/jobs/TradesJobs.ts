@@ -2,13 +2,16 @@ import { Queue, Worker,QueueScheduler } from 'bullmq'
 
 import Trades from '../database/tradesdb';
 
+const RedisPort: number = parseInt(process.env.REDIS_PORT as string);
+const RedisHost: string = (process.env.REDIS_HOST as string);
+
 const myQueueScheduler = new QueueScheduler('Trade', { connection: {
-    host: "127.0.0.1",
-    port: 6379,
+    host: RedisHost,
+    port: RedisPort,
   }});
 export const queue=new Queue('Trade', { connection: {
-    host: "127.0.0.1",
-    port: 6379,
+    host: RedisHost,
+    port: RedisPort,
   }});
 
 export const worker = new Worker('Trade', async (job:any)=>{
@@ -60,6 +63,6 @@ export const worker = new Worker('Trade', async (job:any)=>{
     }
         
   }, { connection: {
-    host: "127.0.0.1",
-    port: 6379,
+    host: RedisHost,
+    port: RedisPort,
   }});

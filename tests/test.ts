@@ -1,7 +1,7 @@
 const fetch=require('node-fetch');  
 const io = require("socket.io-client");
 import 'dotenv/config';
-
+import {worker,queue} from '../src/jobs/TradesJobs'
 //------------------------------------------
 //------------------------------------------
 //Open the server Before executing the tests
@@ -65,7 +65,7 @@ afterAll(async()=>{
     })
     if (socket.connected) {
         socket.disconnect();
-      }
+    }
     
 })
 
@@ -98,9 +98,11 @@ describe("User_Tests",()=>{
     })
     
     it("Update_User",async () => {
+        const id=await getUserId();
+        const UpdateQuery={...UserUpdatedQuery,...{id:id}}
         const response=await fetch('http://localhost:3030/user/update',{
             method:'post',
-            body:JSON.stringify(UserUpdatedQuery),
+            body:JSON.stringify(UpdateQuery),
             headers: {'Content-Type': 'application/json'}
         })
         const data = await response.json();
@@ -119,25 +121,24 @@ describe("User_Tests",()=>{
 })
 
 describe("Trade_Tests",()=>{
-
     it("Create_Unfinished",async()=>{
         const userId=await getUserId();
-        let NewTradeQuery={...TradeQuery,userId}
+        let body={...TradeQuery,...{userId}}
         const response=await fetch('http://localhost:3030/trade/createunfinished',{
             method:'post',
-            body:JSON.stringify(NewTradeQuery),
+            body:JSON.stringify(body),
             headers: {'Content-Type': 'application/json'}
         })
         const data = await response.json();
-        expect(data.message).toBe("Trade Successfully Started")
+        expect(data.message).toBe("Trade Sucessfully created")
     })
 
     it("Update_Finished",async()=>{
         const userId=await getUserId();
-        let NewUpdatedTradeQuery={...UserUpdatedQuery,userId}
+        let body={...UpdatedTradeQuery,userId}
         const response=await fetch('http://localhost:3030/trade/updatefinished',{
             method:'post',
-            body:JSON.stringify(NewUpdatedTradeQuery),
+            body:JSON.stringify(body),
             headers: {'Content-Type': 'application/json'}
         })
         const data = await response.json();
@@ -155,6 +156,7 @@ describe("Trade_Tests",()=>{
     })
 })
 
+/*
 describe("Forex_Tests",()=>{
     const Today=new Date();
     const Yesterday=new Date(Today.setDate(Today.getDate()-1));
@@ -193,7 +195,7 @@ describe("Forex_Tests",()=>{
         expect(response.status).toBe(200)
         expect(data.error).toBe(undefined)
     })
-})
+})*/
 
 describe("Websocket_Tests",()=>{
     it("Connect_Websocket",()=>{

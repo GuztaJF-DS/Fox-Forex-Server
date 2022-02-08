@@ -17,8 +17,6 @@ export function connect(io:any){
     });
 
     io.on("connection", (socket: any)=> {
-      
-      console.log('connected '+socket.id)
       MarketDataWs.on('message', function incoming(data:any) {
         socket.emit("sendData",data.toString())
       });
@@ -27,4 +25,4 @@ export function connect(io:any){
   catch(err){
     console.log(err);
   }  
-};
+};  

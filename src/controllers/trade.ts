@@ -1,5 +1,6 @@
 import express,{Request,Response} from 'express';
 import Trades from '../database/tradesdb';
+import {worker,queue} from '../jobs/TradesJobs'
 
 const router=express();
 
@@ -15,7 +16,8 @@ type requestBodyTrades={
     Finished:boolean,
     NextOpening:number,
     ID:number,
-    userId:number
+    userId:number,
+    delayTime:number
 }
 
 router.post("/createunfinished",async(req:Request,res:Response)=>{
@@ -28,14 +30,19 @@ router.post("/createunfinished",async(req:Request,res:Response)=>{
             SwapTax:body.SwapTax,
             Finished:false,
             NextOpening:body.NextOpening,
-            userId:body.userId
+            userId:body.userId,
+            delayTime:body.delayTime
         }
-        const result =await Trades.create(query)
-        if(result){
-            res.status(200).send({message:"Trade Successfully Started"});
-        }
+        queue.add('Trade',{query,type:"create"},{ removeOnComplete: true, removeOnFail: 1000,delay:body.delayTime}).then(()=>{
+            let a=0
+            worker.on('completed',(job:any, returnvalue: any) => {
+                a=a+1
+                if(a==1){
+                    res.json(returnvalue)
+                }
+            })
+        })        
     }catch(err){
-        console.log(err);
         res.status(400).send({error:"Error on Create Register"})
     }
 })
@@ -43,32 +50,15 @@ router.post("/createunfinished",async(req:Request,res:Response)=>{
 router.post("/updatefinished",async(req:Request,res:Response)=>{
     try{
         const body=req.body as requestBodyTrades;
-        let tradeInfo=await Trades.findAll({where:{userId:body.userId}});
-        let OldQuery=tradeInfo[tradeInfo.length-1];
-        
-        let query={
-            Lots:OldQuery.Lots,
-            ExchangeType:OldQuery.ExchangeType,
-            Profit:body.Profit,
-            StartDate:OldQuery.StartDate,
-            FinalDate:body.FinalDate,            
-            PipQtd:body.PipQtd,
-            PipPrice:body.PipPrice,
-            SwapTax:OldQuery.SwapTax,
-            Finished:true,
-            NextOpening:0,
-            userId:body.userId
-        }
-        
-        if(OldQuery.Finished===false){
-            const result=await Trades.update(query,{where:{id:OldQuery.id,userId:query.userId}})
-            if(result){
-                res.status(200).send({message:"Trade Sucessfully Finished"})
-            }
-        }
-        else{
-            res.status(200).send({message:"The Trade was already Finished!"})
-        }
+        queue.add('Trades',{body,type:"update"},{ removeOnComplete: true, removeOnFail: 1000 ,delay:body.delayTime}).then(()=>{
+            let a=0
+            worker.on('completed',(job:any, returnvalue: any) => {
+                a=a+1
+                if(a==1){
+                    res.json(returnvalue)
+                }
+            })
+        })
     }catch(err){
         console.log(err);
         res.status(400).send({error:"Error on Create Register"})

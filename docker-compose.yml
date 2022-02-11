@@ -24,7 +24,7 @@ services:
       - POSTGRES_PASSWORD=securepassword
       - POSTGRES_DB=forex_db
     ports:
-      - '5431:5432'
+      - '5430:5430'
     volumes: 
       - db:/var/lib/postgresql/data
   redis:

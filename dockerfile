@@ -12,4 +12,6 @@ EXPOSE 3030
 
 EXPOSE 8080
 
+EXPOSE 5430
+
 CMD npm run dev
